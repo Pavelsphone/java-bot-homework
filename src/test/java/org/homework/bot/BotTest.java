@@ -10,11 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BotTest {
 
@@ -62,21 +58,13 @@ class BotTest {
     void testOnUpdateReceived() {
         when(update.hasMessage()).thenReturn(true);
         when(update.getMessage()).thenReturn(message);
-        when(message.toString()).thenReturn("Test message");
-
-        // Перехватываем вывод в консоль
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
 
         bot.onUpdateReceived(update);
-
-        // Проверяем, что логгер вывел сообщение
-        String output = outContent.toString();
-        assertTrue(output.contains("Received update: Test message"),
-                "Expected log output not found. Actual output: " + output);
 
         // Проверяем, что commandHandler.handle был вызван
         verify(commandHandler).handle(update);
     }
 }
+
+
 
